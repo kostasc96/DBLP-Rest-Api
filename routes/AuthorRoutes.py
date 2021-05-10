@@ -2,42 +2,10 @@ from flask import jsonify
 from flask import Blueprint
 from flask import request
 from persistence.graph import graph_auth
+from persistence.queries import query1, query2
 
 route1 = Blueprint('route1', __name__)
 graph = graph_auth("dblpDB")
-
-authors = [
-    {
-        "id": 1,
-        "name": "Larry Page",
-        "companies": [
-            {
-                "name": "Google"
-            }
-        ]
-    },
-    {
-        "id": 2,
-        "name": "Bill Gates",
-        "companies": [
-            {
-                "name": "Microsoft"
-            }
-        ]
-    }
-]
-
-query1 = """
-    MATCH (n:Author)-[:HAS_CONTRIBUTED]->(p:Publication)
-    WHERE n.name = $name
-    RETURN p.title as title,p.year as year
-    """
-
-query2 = """
-    MATCH (a:Author)-[:HAS_CONTRIBUTED]->(p:Publication)<-[:HAS_CONTRIBUTED]-(c:Author)
-    WHERE a.name = $name and c.name <> a.name and p.year = $year
-    RETURN a.name as name,count(c) as no_coauthorships
-    """
 
 
 @route1.route('/publications/query1')
