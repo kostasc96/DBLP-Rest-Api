@@ -2,7 +2,7 @@ from flask import jsonify
 from flask import Blueprint
 from flask import request
 from persistence.graph import graph_auth
-from persistence.queries import query1, query2
+from persistence.queries import query1, query2, query3
 
 route1 = Blueprint('route1', __name__)
 graph = graph_auth("dblpDB")
@@ -23,30 +23,14 @@ def get_coauthors():
     return jsonify(data)
 
 
+@route1.route('/topk/query3')
+def get_topk_authors_query3():
+    category = str(request.args.get('category'))
+    k = int(request.args.get('k'))
+    data = graph.run(query3, category=category, k=k).data()
+    return jsonify(data)
+
+
 @route1.route('/coauthors/<string:authorId>/year/<string:year>')
 def get_coauthors_year(authorId, year):
-    pass
-
-
-@route1.route('/authors/conference-journal/<string:k>/<string:option>')
-def get_authors_conference_journal(k, option):
-    num = int(k)
-    pass
-
-
-@route1.route('/authors/single-work/<string:k>')
-def get_authors_most_coauthors_per_single_work(k):
-    k = int(k)
-    pass
-
-
-@route1.route('/authors/coauthors/<string:k>/<string:year>')
-def get_authors_most_coauthors_year(k, year):
-    k = int(k)
-    pass
-
-
-@route1.route('/authors/<string:k>')
-def get_authors_most_active_years(k):
-    k = int(k)
     pass

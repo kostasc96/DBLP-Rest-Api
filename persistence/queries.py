@@ -9,3 +9,10 @@ query2 = """
     WHERE $name <> c.name and p.year = $year
     RETURN c.name as name,count(p) as no_coauthorships
     """
+
+query3 = """
+    MATCH (a:Author)-[:HAS_CONTRIBUTED]->(p:Publication{category:$category})
+    RETURN a.name,count(p) as count
+    ORDER BY count(p) DESC
+    LIMIT $k
+"""
