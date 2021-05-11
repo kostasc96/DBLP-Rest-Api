@@ -5,7 +5,7 @@ query1 = """
     """
 
 query2 = """
-    MATCH (a:Author)-[:HAS_CONTRIBUTED]->(p:Publication)<-[:HAS_CONTRIBUTED]-(c:Author)
-    WHERE a.name = $name and c.name <> a.name and p.year = $year
-    RETURN a.name as name,count(c) as no_coauthorships
+    MATCH (:Author{name:$name})-[:HAS_CONTRIBUTED]->(p:Publication)<-[:HAS_CONTRIBUTED]-(c:Author)
+    WHERE p.year = $year
+    RETURN $name as name,count(c) as no_coauthorships
     """
