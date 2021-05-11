@@ -11,21 +11,8 @@ parser = etree.XMLParser(load_dtd=True)
 
 dtd = '<!DOCTYPE dblp SYSTEM "dblp.dtd">'
 
-graph = graph_auth("dblpDB")
-graph.delete_all()
 
-try:
-    graph.schema.drop_index('Author', 'name')
-    graph.schema.drop_index('Journal', 'name')
-    graph.schema.drop_index('Book', 'name')
-except:
-    None
-graph.schema.create_index('Author', 'name')
-graph.schema.create_index('Journal', 'name')
-graph.schema.create_index('Book', 'name')
-
-
-def parser_articles(file_name, dtd1, num1, parseAll):
+def parser_articles(graph, file_name, dtd1, num1, parseAll):
     i = 0
     writing = False
     start = "<article"
@@ -115,7 +102,7 @@ def parser_articles(file_name, dtd1, num1, parseAll):
                 continue
 
 
-def parser_inproceedings(file_name, dtd1, num1, parseAll):
+def parser_inproceedings(graph, file_name, dtd1, num1, parseAll):
     i = 0
     writing = False
     start2 = "<inproceedings"
@@ -206,7 +193,7 @@ def parser_inproceedings(file_name, dtd1, num1, parseAll):
                 continue
 
 
-def parser_incollections(file_name, dtd1, num1, parseAll):
+def parser_incollections(graph, file_name, dtd1, num1, parseAll):
     i = 0
     writing = False
     start3 = "<incollection"
