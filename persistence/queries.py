@@ -62,3 +62,22 @@ query8 = """
     ORDER BY average_per_year DESC
     LIMIT $k
 """
+
+query9 = """
+    CALL {
+        MATCH (a:Author{name:$name})-[:HAS_CONTRIBUTED]->(:Publication)<-[:HAS_CONTRIBUTED]-(b:Author)
+        RETURN a,b
+    }
+    MATCH (b:Author)-[:HAS_CONTRIBUTED]->(:Publication)<-[:HAS_CONTRIBUTED]-(c:Author)
+    WHERE NOT (a)-[:HAS_CONTRIBUTED]->(:Publication)<-[:HAS_CONTRIBUTED]-(c)
+    RETURN c.name as name, COUNT(b) as common_coauths
+    ORDER BY common_coauths DESC
+    LIMIT $k
+"""
+
+query10 = """
+    MATCH (a:Author)-[:HAS_CONTRIBUTED]->(p:Publication{year:$year})
+    WITH a.name as name,COUNT(p) as count
+    WHERE count>3
+    RETURN name,count
+"""
