@@ -45,3 +45,10 @@ query6 = """
     ORDER BY years_active DESC
     LIMIT $k
 """
+
+query6_2 = """
+    MATCH (a:Author)-[:HAS_CONTRIBUTED]->(p:Publication)
+    RETURN a.name as name,count(DISTINCT p.year) as years_active
+    ORDER BY years_active DESC
+    LIMIT $k
+"""
