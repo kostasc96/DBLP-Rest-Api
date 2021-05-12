@@ -23,7 +23,7 @@ query4 = """
         WHERE a.name <> c.name
         RETURN a.name as name,p.title as title,count(c) as no_coauthors
     }
-    RETURN DISTINCT name,no_coauthors
-    ORDER BY no_coauthors DESC
+    RETURN name,max(no_coauthors) as co_authors
+    ORDER BY max(no_coauthors) DESC
     LIMIT $k
 """
