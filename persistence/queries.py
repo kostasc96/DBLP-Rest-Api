@@ -81,3 +81,8 @@ query10 = """
     WHERE count>3
     RETURN name,count
 """
+
+query11 = """
+    MATCH (:Author{name:$name})-[:HAS_CONTRIBUTED]->(p:Publication{year:$year})
+    RETURN $name as name, sum(p.pagesNo) as pages_no
+"""

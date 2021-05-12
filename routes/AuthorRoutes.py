@@ -2,7 +2,8 @@ from flask import jsonify
 from flask import Blueprint
 from flask import request
 from persistence.graph import graph_auth
-from persistence.queries import query1, query2, query3, query4, query5, query6, query6_2, query8, query9, query10
+from persistence.queries import query1, query2, query3, query4, query5, query6, query6_2, query8, query9, query10, \
+    query11
 
 route1 = Blueprint('route1', __name__)
 graph = graph_auth("dblpDB")
@@ -82,6 +83,9 @@ def get_query10():
     return jsonify(data)
 
 
-@route1.route('/coauthors/<string:authorId>/year/<string:year>')
-def get_coauthors_year(authorId, year):
-    pass
+@route1.route('/pages/query11')
+def get_query11():
+    year = str(request.args.get('year'))
+    author_name = str(request.args.get('author_name'))
+    data = graph.run(query11, name=author_name, year=year).data()
+    return jsonify(data)
