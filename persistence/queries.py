@@ -27,3 +27,11 @@ query4 = """
     ORDER BY max(no_coauthors) DESC
     LIMIT $k
 """
+
+query5 = """
+    MATCH (a:Author)-[:HAS_CONTRIBUTED]->(:Publication{year:$year})<-[:HAS_CONTRIBUTED]-(c:Author)
+    WHERE a.name <> c.name
+    RETURN a.name as name,count(c) as no_coauthors
+    ORDER BY count(c) DESC
+    LIMIT $k
+"""
