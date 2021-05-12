@@ -65,12 +65,24 @@ query8 = """
 
 query9 = """
     CALL {
-        MATCH (a:Author{name:$name})-[:HAS_CONTRIBUTED]->(:Publication)<-[:HAS_CONTRIBUTED]-(b:Author)
-        RETURN a,b
+        MATCH (a:Author{name:$name})-[:HAS_CONTRIBUTED]->(:Publication)<-[:HAS_CONTRIBUTED]-(b:Author)-[:HAS_CONTRIBUTED]->(:Publication)<-[:HAS_CONTRIBUTED]-(c:Author)
+        WHERE NOT (a)-[:HAS_CONTRIBUTED]->(:Publication)<-[:HAS_CONTRIBUTED]-(c) AND b.name <> $name AND c.name <> $name AND b.name <> c.name
+        RETURN a.name as a_name,c.name as name, COUNT(DISTINCT b) as common_coauths
     }
-    MATCH (b:Author)-[:HAS_CONTRIBUTED]->(:Publication)<-[:HAS_CONTRIBUTED]-(c:Author)
-    WHERE NOT (a)-[:HAS_CONTRIBUTED]->(:Publication)<-[:HAS_CONTRIBUTED]-(c)
-    RETURN c.name as name, COUNT(b) as common_coauths
+    RETURN name,common_coauths
+    ORDER BY common_coauths DESC
+    LIMIT $k
+"""
+
+query9_1 = """
+    MATCH (a:Author{name:$name})-[:HAS_CONTRIBUTED]->(:Publication)<-[:HAS_CONTRIBUTED]-(b:Author)
+    RETURN ID(b)
+"""
+
+query9_2 = """
+    MATCH (b:Author)-[:HAS_CONTRIBUTED]->(p:Publication)<-[:HAS_CONTRIBUTED]-(c:Author)
+    WHERE ID(b) in $coauthors AND c.name <> $name AND NOT (c)-[:HAS_CONTRIBUTED]->(:Publication)<-[:HAS_CONTRIBUTED]-(:Author{name:$name})
+    RETURN c.name as name, COUNT(DISTINCT b) as common_coauths
     ORDER BY common_coauths DESC
     LIMIT $k
 """
