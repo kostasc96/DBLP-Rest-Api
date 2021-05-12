@@ -2,7 +2,7 @@ from flask import jsonify
 from flask import Blueprint
 from flask import request
 from persistence.graph import graph_auth
-from persistence.queries import query1, query2, query3, query4, query5, query6, query6_2
+from persistence.queries import query1, query2, query3, query4, query5, query6, query6_2, query8
 from operator import itemgetter
 
 route1 = Blueprint('route1', __name__)
@@ -58,6 +58,12 @@ def get_topk_authors_query6():
 def get_topk_authors_query6_2():
     k = int(request.args.get('k'))
     data = graph.run(query6_2, k=k).data()
+    return jsonify(data)
+
+@route1.route('/topk/query8')
+def get_topk_authors_query8():
+    k = int(request.args.get('k'))
+    data = graph.run(query8, k=k).data()
     return jsonify(data)
 
 

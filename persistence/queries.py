@@ -52,3 +52,13 @@ query6_2 = """
     ORDER BY years_active DESC
     LIMIT $k
 """
+
+query8 = """
+    CALL{
+        MATCH (a:Author)-[:HAS_CONTRIBUTED]->(p:Publication{category:"article"})
+        RETURN a.name as name,p.year as year,count(ID(p)) as no_articles
+    }
+    RETURN name, round(AVG(no_articles),3) as average_per_year
+    ORDER BY average_per_year DESC
+    LIMIT $k
+"""
