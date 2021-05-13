@@ -98,3 +98,14 @@ query11 = """
     MATCH (:Author{name:$name})-[:HAS_CONTRIBUTED]->(p:Publication{year:$year})
     RETURN $name as name, sum(p.pagesNo) as pages_no
 """
+
+query13 = """
+    CALL {
+        MATCH (j:Journal{name:$name})-[:HAS_ARTICLE]->(p:Publication)<-[:HAS_CONTRIBUTED]-(c:Author),(a:Author)-[:HAS_CONTRIBUTED]->(p)<-[:HAS_CONTRIBUTED]-(b:Author)
+        RETURN a.name as coauthor_1,b.name as coauthor_2,c.name as coauthor_3, COUNT(p) as count
+        ORDER BY count DESC
+        LIMIT 1
+    }
+    RETURN coauthor_1,coauthor_2,coauthor_3
+"""
+
