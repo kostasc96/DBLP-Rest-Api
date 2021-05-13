@@ -109,3 +109,9 @@ query13 = """
     RETURN coauthor_1,coauthor_2,coauthor_3
 """
 
+query14 = """
+    MATCH (b:Book)-[:HAS_PUBLICATION]->(:Publication)<-[:HAS_CONTRIBUTED]-(a:Author),(b)-[:HAS_PUBLICATION]->(:Publication)<-[:HAS_CONTRIBUTED]-(a2:Author)
+    WHERE (NOT (a)-[:HAS_CONTRIBUTED]->(:Publication)<-[:HAS_CONTRIBUTED]-(a2)) AND ID(a) < ID(a2)
+    RETURN a.name as author_1,a2.name as author_2
+"""
+
