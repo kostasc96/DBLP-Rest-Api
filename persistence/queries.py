@@ -115,3 +115,22 @@ query14 = """
     RETURN a.name as author_1,a2.name as author_2
 """
 
+query16 = """
+    CALL {
+        MATCH (a:Author)-[:HAS_CONTRIBUTED]->(p:Publication)<-[:HAS_CONTRIBUTED]-(b:Author)
+        RETURN a.name as name, p.title, COUNT(DISTINCT b) as count_auths
+    }
+    RETURN name, AVG(count_auths) as average_number
+    ORDER BY average_number DESC
+    LIMIT $k
+"""
+
+query18 = """
+    CALL {
+        MATCH (b:Book)-[:HAS_PUBLICATION]->(p:Publication)<-[:HAS_CONTRIBUTED]-(a:Author)
+        RETURN b.name, a.name as name, COUNT(p) as count
+    }
+    RETURN name, count
+    ORDER BY count DESC
+    LIMIT 1
+"""
