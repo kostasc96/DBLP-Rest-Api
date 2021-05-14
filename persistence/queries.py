@@ -148,6 +148,22 @@ query16 = """
     LIMIT $k
 """
 
+query17 = """
+    MATCH (a:Author)-[:HAS_CONTRIBUTED]->(p:Publication)
+    WITH DISTINCT a.name as name, p.year as year 
+    WITH name, collect(toInteger(year)) as years
+    WITH name, apoc.coll.sort(years) as sorted_years
+    WHERE size(sorted_years) > 1
+    WITH name,sorted_years,reduce(result=false, i IN range(1, size(sorted_years) - 1) |
+        CASE
+        WHEN sorted_years[i] - sorted_years[i-1] >= $n OR result=true THEN true
+        ELSE false
+        END
+    ) AS result
+    WHERE result=true
+    RETURN name
+"""
+
 query18 = """
     CALL {
         MATCH (b:Book)-[:HAS_PUBLICATION]->(p:Publication)<-[:HAS_CONTRIBUTED]-(a:Author)
