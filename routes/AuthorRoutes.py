@@ -3,7 +3,7 @@ from flask import Blueprint
 from flask import request
 from persistence.graph import graph_auth
 from persistence.queries import query1, query2, query3, query4, query5, query6, query6_2, query8, query9, query10, \
-    query11, query13, query14, query16, query18
+    query11, query13, query14, query16, query18, query12
 
 route1 = Blueprint('route1', __name__)
 graph = graph_auth("dblpDB")
@@ -81,6 +81,16 @@ def get_query11():
     year = str(request.args.get('year'))
     author_name = str(request.args.get('author_name'))
     data = graph.run(query11, name=author_name, year=year).data()
+    return jsonify(data)
+
+
+@route1.route('/topk/query12')
+def get_topk_query12():
+    year = str(request.args.get('year'))
+    position = str(request.args.get('position'))
+    journal_name = str(request.args.get('journal_name'))
+    k = int(request.args.get('k'))
+    data = graph.run(query12, name=journal_name, year=year, pos=position, k=k).data()
     return jsonify(data)
 
 
