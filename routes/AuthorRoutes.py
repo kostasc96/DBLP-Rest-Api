@@ -54,13 +54,6 @@ def get_topk_authors_query6():
     return jsonify(data)
 
 
-@route1.route('/topk/query6_2')
-def get_topk_authors_query6_2():
-    k = int(request.args.get('k'))
-    data = graph.run(query6_2, k=k).data()
-    return jsonify(data)
-
-
 @route1.route('/topk/query8')
 def get_topk_authors_query8():
     k = int(request.args.get('k'))

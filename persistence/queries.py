@@ -36,7 +36,7 @@ query5 = """
     LIMIT $k
 """
 
-query6 = """
+query6_2 = """
     CALL {
         MATCH (a:Author)-[:HAS_CONTRIBUTED]->(p:Publication)
         RETURN a.name as name,max(toInteger(p.year)) as latest_year, min(toInteger(p.year)) as earliest_year
@@ -46,7 +46,7 @@ query6 = """
     LIMIT $k
 """
 
-query6_2 = """
+query6 = """
     MATCH (a:Author)-[:HAS_CONTRIBUTED]->(p:Publication)
     RETURN a.name as name,count(DISTINCT p.year) as years_active
     ORDER BY years_active DESC
