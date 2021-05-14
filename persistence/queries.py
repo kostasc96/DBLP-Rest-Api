@@ -122,6 +122,22 @@ query14 = """
     RETURN a.name as author_1,a2.name as author_2
 """
 
+query15 = """
+    MATCH (a:Author)-[:HAS_CONTRIBUTED]->(p:Publication)
+    WITH DISTINCT a.name as name, p.year as year 
+    WITH name, collect(toInteger(year)) as years
+    WITH name, apoc.coll.sort(years) as sorted_years
+    WHERE size(sorted_years) = $k
+    WITH name,sorted_years,reduce(result=true, i IN range(1, size(sorted_years) - 1) |
+        CASE
+        WHEN sorted_years[i] = sorted_years[i-1]+1 AND result=true THEN true
+        ELSE false
+        END
+    ) AS result
+    WHERE result=true
+    RETURN name
+"""
+
 query16 = """
     CALL {
         MATCH (a:Author)-[:HAS_CONTRIBUTED]->(p:Publication)<-[:HAS_CONTRIBUTED]-(b:Author)
