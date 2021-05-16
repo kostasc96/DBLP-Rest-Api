@@ -130,12 +130,12 @@ query15 = """
     WITH name,sorted_years,reduce(var=0, i IN range(1, size(sorted_years) - 1) |
         CASE
         WHEN sorted_years[i] = sorted_years[i-1]+1 AND var>0 THEN var+1
-        WHEN sorted_years[i] = sorted_years[i-1]+1 AND var=0 THEN 2
-        WHEN var>=$k AND sorted_years[i] <> sorted_years[i-1]+1 THEN var
+        WHEN sorted_years[i] = sorted_years[i-1]+1 AND var=0 THEN 1
+        WHEN var>=$k-1 AND sorted_years[i] <> sorted_years[i-1]+1 THEN var
         ELSE 0
         END
         ) AS result
-    WHERE result = $k
+    WHERE result = $k-1
     RETURN name
 """
 
