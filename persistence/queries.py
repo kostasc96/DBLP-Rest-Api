@@ -131,6 +131,7 @@ query15 = """
         CASE
         WHEN sorted_years[i] = sorted_years[i-1]+1 AND var>0 THEN var+1
         WHEN sorted_years[i] = sorted_years[i-1]+1 AND var=0 THEN 2
+        WHEN var>=$k AND sorted_years[i] <> sorted_years[i-1]+1 THEN var
         ELSE 0
         END
         ) AS result
