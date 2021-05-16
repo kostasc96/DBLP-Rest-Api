@@ -127,14 +127,14 @@ query15 = """
     WITH DISTINCT a.name as name, p.year as year 
     WITH name, collect(toInteger(year)) as years
     WITH name, apoc.coll.sort(years) as sorted_years
-    WHERE size(sorted_years) = $k
-    WITH name,sorted_years,reduce(result=true, i IN range(1, size(sorted_years) - 1) |
+    WITH name,sorted_years,reduce(var=0, i IN range(1, size(sorted_years) - 1) |
         CASE
-        WHEN sorted_years[i] = sorted_years[i-1]+1 AND result=true THEN true
-        ELSE false
+        WHEN sorted_years[i] = sorted_years[i-1]+1 AND var>0 THEN var+1
+        WHEN sorted_years[i] = sorted_years[i-1]+1 AND var=0 THEN 2
+        ELSE 0
         END
-    ) AS result
-    WHERE result=true
+        ) AS result
+    WHERE result = $k
     RETURN name
 """
 
