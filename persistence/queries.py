@@ -156,7 +156,7 @@ query17 = """
     WHERE size(sorted_years) > 1
     WITH name,sorted_years,reduce(result=false, i IN range(1, size(sorted_years) - 1) |
         CASE
-        WHEN sorted_years[i] - sorted_years[i-1] >= $n OR result=true THEN true
+        WHEN sorted_years[i] - sorted_years[i-1] - 1 > $n OR result=true THEN true
         ELSE false
         END
     ) AS result
