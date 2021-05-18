@@ -139,6 +139,7 @@ query15 = """
     MATCH (a:Author)-[:HAS_CONTRIBUTED]->(p:Publication)
     WITH DISTINCT a.name as name, p.year as year 
     WITH name, collect(toInteger(year)) as years
+    WHERE size(years)>=$k
     WITH name, apoc.coll.sort(years) as sorted_years
     WITH name,sorted_years,reduce(var=0, i IN range(1, size(sorted_years) - 1) |
         CASE
@@ -148,7 +149,7 @@ query15 = """
         ELSE 0
         END
         ) AS result
-    WHERE result = $k-1
+    WHERE result >= $k-1
     RETURN name
 """
 
