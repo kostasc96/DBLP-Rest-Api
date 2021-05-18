@@ -53,6 +53,19 @@ query6 = """
     LIMIT $k
 """
 
+query7 = """
+    CALL {
+        MATCH (a:Author)-[:HAS_CONTRIBUTED]->(:Publication)<-[:HAS_CONTRIBUTED]-(a1:Author)
+        MATCH (a:Author)-[:HAS_CONTRIBUTED]->(:Publication)<-[:HAS_CONTRIBUTED]-(a2:Author)
+        WHERE ID(a1) < ID(a2) AND NOT (a1:Author)-[:HAS_CONTRIBUTED]->(:Publication)<-[:HAS_CONTRIBUTED]-(a2:Author)
+        WITH a.name as name,  a1.name as coauthor1, a2.name as coauthor2
+        RETURN  DISTINCT name, [coauthor1,coauthor2] as pairs
+    }
+    RETURN name, COUNT(pairs) as count
+    ORDER BY count DESC
+    LIMIT $k
+"""
+
 query8 = """
     CALL{
         MATCH (a:Author)-[:HAS_CONTRIBUTED]->(p:Publication{category:"article"})
