@@ -10,6 +10,8 @@ graph = graph_auth("dblpDB")
 @route2.route('/parsing')
 def get_publications_author():
     num_records = int(request.args.get('num_records'))
+    if num_records > 1000:
+        return jsonify({"status": 400, "message": "Number of publications per category should not be over 1000"})
     graph.delete_all()
 
     try:
