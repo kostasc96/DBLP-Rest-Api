@@ -16,11 +16,13 @@ def get_publications_author():
         graph.schema.drop_index('Author', 'name')
         graph.schema.drop_index('Journal', 'name')
         graph.schema.drop_index('Book', 'name')
+        graph.schema.drop_index('Publication', 'year')
     except:
         None
     graph.schema.create_index('Author', 'name')
     graph.schema.create_index('Journal', 'name')
     graph.schema.create_index('Book', 'name')
+    graph.schema.create_index('Publication', 'year')
     parser_articles(graph, 'files/dblp.xml.gz', '<!DOCTYPE dblp SYSTEM "dblp.dtd">', num_records, False)
     parser_inproceedings(graph, 'files/dblp.xml.gz', '<!DOCTYPE dblp SYSTEM "dblp.dtd">', num_records, False)
     parser_incollections(graph, 'files/dblp.xml.gz', '<!DOCTYPE dblp SYSTEM "dblp.dtd">', num_records, False)
